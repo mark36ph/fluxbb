@@ -48,6 +48,8 @@ else
 	$tpl_inc_dir = PUN_ROOT.'include/user/';
 }
 
+flux_hook('hd_pre_template_loaded');
+
 $tpl_main = file_get_contents($tpl_file);
 
 // START SUBST - <pun_include "*">
@@ -157,6 +159,8 @@ function process_form(the_form)
 if (!empty($page_head))
 	echo implode("\n", $page_head)."\n";
 
+flux_hook('hd_pun_head');
+
 $tpl_temp = trim(ob_get_contents());
 $tpl_main = str_replace('<pun_head>', $tpl_temp, $tpl_main);
 ob_end_clean();
@@ -173,8 +177,7 @@ if (isset($focus_element))
 
 
 // START SUBST - <pun_page>
-$script_name = preg_replace('/(\?.*)?$/', '', $_SERVER['REQUEST_URI']);
-$tpl_main = str_replace('<pun_page>', htmlspecialchars(basename($script_name, '.php')), $tpl_main);
+$tpl_main = str_replace('<pun_page>', htmlspecialchars(basename($_SERVER['SCRIPT_NAME'], '.php')), $tpl_main);
 // END SUBST - <pun_page>
 
 
@@ -325,6 +328,7 @@ else
 	$tpl_main = str_replace('<pun_announcement>', '', $tpl_main);
 // END SUBST - <pun_announcement>
 
+flux_hook('hd_head');
 
 // START SUBST - <pun_main>
 ob_start();
