@@ -48,6 +48,8 @@ else
 	$tpl_inc_dir = PUN_ROOT.'include/user/';
 }
 
+flux_hook('hd_pre_template_loaded');
+
 $tpl_main = file_get_contents($tpl_file);
 
 // START SUBST - <pun_include "*">
@@ -157,6 +159,8 @@ function process_form(the_form)
 if (!empty($page_head))
 	echo implode("\n", $page_head)."\n";
 
+flux_hook('hd_pun_head');
+
 $tpl_temp = trim(ob_get_contents());
 $tpl_main = str_replace('<pun_head>', $tpl_temp, $tpl_main);
 ob_end_clean();
@@ -243,7 +247,7 @@ else
 {
 	$page_statusinfo[] = '<li><span>'.$lang_common['Logged in as'].' <strong>'.pun_htmlspecialchars($pun_user['username']).'</strong></span></li>';
 	$page_statusinfo[] = '<li><span>'.sprintf($lang_common['Last visit'], format_time($pun_user['last_visit'])).'</span></li>';
-
+flux_hook('hd_page_status_after_last_visit');
 	if ($pun_user['is_admmod'])
 	{
 		if ($pun_config['o_report_method'] == '0' || $pun_config['o_report_method'] == '2')
@@ -324,6 +328,7 @@ else
 	$tpl_main = str_replace('<pun_announcement>', '', $tpl_main);
 // END SUBST - <pun_announcement>
 
+flux_hook('hd_head');
 
 // START SUBST - <pun_main>
 ob_start();
